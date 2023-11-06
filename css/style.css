@@ -1,0 +1,292 @@
+@import url('https://fonts.googleapis.com/css2?family=Abel&family=Abril+Fatface&family=Alkatra&family=Bebas+Neue&family=Comme&family=Damion&family=Lilita+One&family=Poiret+One&family=Roboto&family=Satisfy&family=Staatliches&family=Unica+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Abel&family=Abril+Fatface&family=Alkatra&family=Antonio&family=Bebas+Neue&family=Comme&family=Damion&family=Lilita+One&family=Poiret+One&family=Roboto&family=Satisfy&family=Staatliches&family=Unica+One&display=swap');
+@import "compass/css3";
+
+
+/*  ========================== Header ========================= */
+
+body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    font-family: Arial, sans-serif;
+    background-color: #121212;
+    color: #ffffff;
+    overflow: auto;
+}
+
+.container {
+    max-width: 100%;
+    /* max-width: 1200px; */
+    margin: 0 auto;
+    /* padding: 0 20px; */    
+    background-image: url('../img/header.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+h2 {
+    font-size: 30px; /* Увеличивает размер текста */
+    margin: 0; /* Убирает внешние отступы */
+    padding: 20px 0; /* Добавляет внутренние отступы сверху и снизу */
+    text-align: center; /* Выравнивает текст по центру */
+}
+
+.dark-music-header {
+    /* background-attachment: fixed; */
+    /* height: 300px; */
+    position: relative;
+    text-align: center;
+    padding: 20px 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+.dark-music-header:before {
+    content: '';
+    /* position: absolute; */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.dark-music-header h1 {
+    font-size: 70px;
+    margin: 0;
+    padding: 0;
+    margin-bottom: 130px;
+    margin-top: 60px;
+    font-family: 'Bebas Neue';
+    letter-spacing: 8px;
+    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.9);
+    cursor: pointer;
+}
+.oxy{
+    color: #fff;
+    font-size: 70px;
+    font-weight: bold;
+    display: inline-block;
+    letter-spacing: 5px;
+    transition: 2s;
+    text-shadow: 0px 0px 0px #0d93a5;
+    position: relative;
+    top: 0px;
+    left: 0px;
+    cursor: default;
+        &:hover{
+            text-shadow: -8px 8px 0px rgb(163, 41, 11);
+            transition: 0.3s;
+            top: -8px;
+            left: 8px;
+        }
+    &.space{width: 20px;height: 100%;}
+}
+
+.dark-music-header nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.dark-music-header nav ul li {
+    display: inline;
+    margin-right: 20px;
+}
+
+.dark-music-header nav ul li a {
+    text-decoration: none;
+    color: #ffffff;
+    font-size: 16px;
+    transition: color 0.3s;
+}
+
+.dark-music-header nav ul li a:hover {
+    color: #ff6f61;
+}
+
+/* ===================================== Artists =============================== */
+
+.section-artists {
+    background: rgba(145, 141, 141, 0.1);
+    /* transition: all 1000ms; */
+    background-image:   url('../img/Backartists.jpg');
+    background-repeat: repeat;
+    background-position: center;
+    display: block;
+    position: relative;
+}
+
+.section-artists h2 {
+    font-family: 'Antonio', bold;
+    font-size: 80px;
+
+}
+.artists-cards {
+    margin-top: 50px;
+}
+
+.image-parlax{
+    width: 100%;
+    cursor: pointer;
+}
+.image-container{
+
+    -webkit-transform-style: preserve-3d;
+        transform-style: preserve-3d;
+    -webkit-perspective: 1000px;    
+	    perspective: 1000px;
+}
+.front-side, .back-side{
+    background-size: cover;
+    background-position: center;
+    min-height: 350px; /* Высота изображения */
+    height: auto;
+    border-radius: 50%; /* Скругление углов */
+    border: 2px rgb(91, 117, 134) solid;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.25);
+    text-align: center;
+    color: #fff;
+    font-size: 1.5rem;
+    -webkit-transition: -webkit-transform .7s cubic-bezier(0.4, 0.2, 0.2, 1);
+    transition: -webkit-transform .7s cubic-bezier(0.4, 0.2, 0.2, 1);
+    -o-transition: transform .7s cubic-bezier(0.4, 0.2, 0.2, 1);
+    transition: transform .7s cubic-bezier(0.4, 0.2, 0.2, 1);
+    transition: transform .7s cubic-bezier(0.4, 0.2, 0.2, 1), -webkit-transform .7s cubic-bezier(0.4, 0.2, 0.2, 1);
+    -webkit-backface-visibility: hidden;
+              backface-visibility: hidden;
+  }
+.back-side{
+  background: #343434;  
+  background: -webkit-linear-gradient(45deg,  #343434 0%,#000000 100%);
+  background: -o-linear-gradient(45deg,  #343434 0%,#000000 100%);
+  background: linear-gradient(45deg,  #343434 0%,#000000 100%);
+}
+
+.front-side:after{
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  content: '';
+  display: block;
+  opacity: .6;
+  background-color: #000;
+  -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+  border-radius: 50%;
+}
+.image-container:hover .front-side,
+.image-container:hover .back-side{
+  -webkit-transition: -webkit-transform .7s cubic-bezier(0.4, 0.2, 0.2, 1);
+  transition: -webkit-transform .7s cubic-bezier(0.4, 0.2, 0.2, 1);
+  -o-transition: transform .7s cubic-bezier(0.4, 0.2, 0.2, 1);
+  transition: transform .7s cubic-bezier(0.4, 0.2, 0.2, 1);
+  transition: transform .7s cubic-bezier(0.4, 0.2, 0.2, 1), -webkit-transform .7s cubic-bezier(0.4, 0.2, 0.2, 1);
+}
+.back-side{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+.inner{
+  -webkit-transform: translateY(-50%) translateZ(60px) scale(0.94);
+            transform: translateY(-50%) translateZ(60px) scale(0.94);
+  top: 50%;
+  position: absolute;
+  left: 0;
+  width: 100%;
+  padding: 2rem;
+  -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+  outline: 1px solid transparent;
+  -webkit-perspective: inherit;
+            perspective: inherit;
+  z-index: 2;
+}
+.image-container .back-side{
+  -webkit-transform: rotateY(180deg);
+            transform: rotateY(180deg);
+  -webkit-transform-style: preserve-3d;
+            transform-style: preserve-3d;
+}
+.image-container .front-side{
+  -webkit-transform: rotateY(0deg);
+            transform: rotateY(0deg);
+  -webkit-transform-style: preserve-3d;
+            transform-style: preserve-3d;
+}
+.image-container:hover .back-side{
+  -webkit-transform: rotateY(0deg);
+          transform: rotateY(0deg);
+  -webkit-transform-style: preserve-3d;
+          transform-style: preserve-3d;
+}
+.image-container:hover .front-side{
+  -webkit-transform: rotateY(-180deg);
+          transform: rotateY(-180deg);
+  -webkit-transform-style: preserve-3d;
+          transform-style: preserve-3d;
+}
+.front-side .inner p{
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  position: relative;
+}
+.front-side .inner p:after{
+  content: '';
+  width: 4rem;
+  height: 1px;
+  position: absolute;
+  background: #C6D4DF;
+  display: block;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  bottom: -.75rem;
+}
+.front-side .inner span{
+  color: rgba(255,255,255,0.7);
+  font-family: 'Montserrat';
+  font-weight: 300;
+}
+
+.artists-cards {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.front-side {
+    width: 350px;
+    height: 350px;
+    object-fit: cover;
+}
+
+.threecards {
+    display: flex;
+    justify-content: space-around;
+    text-align: center;
+    flex-wrap: wrap;
+}
+
+.beatportbutton1 {
+    width: 150px;
+    height: 40px;
+    border-radius: 40px;
+}
+
+.beatportbutton1 a {
+    text-decoration: none;
+    -webkit-text-shadow: 1px 0px 4px rgba(0, 0, 0, 0.67);
+    -moz-text-shadow: 1px 0px 4px rgba(0, 0, 0, 0.67);
+    text-shadow: 1px 0px 4px rgba(0, 0, 0, 0.67);
+}
+
+.beatportbutton1 a:hover {
+    color: red;
+}
