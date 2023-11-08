@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Abel&family=Abril+Fatface&family=Alkatra&family=Bebas+Neue&family=Comme&family=Damion&family=Lilita+One&family=Poiret+One&family=Roboto&family=Satisfy&family=Staatliches&family=Unica+One&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Abel&family=Abril+Fatface&family=Alkatra&family=Antonio&family=Bebas+Neue&family=Comme&family=Damion&family=Lilita+One&family=Poiret+One&family=Roboto&family=Satisfy&family=Staatliches&family=Unica+One&display=swap');
-@import "compass/css3";
+/* @import "compass/css3"; */
 
 
 /*  ========================== Header ========================= */
@@ -289,4 +289,21 @@ h2 {
 
 .beatportbutton1 a:hover {
     color: red;
+}
+
+
+.latest-releases{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.release-card{
+    max-width: 250px;
+    margin: 20px;
+}
+
+.release-card img{
+    width: 100%;
 }
