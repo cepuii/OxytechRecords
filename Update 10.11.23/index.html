@@ -16,7 +16,7 @@
             <li><span class="about-li">About Us</span></li>
             <li><span class="artists-li">Artists</span></li>
             <li><span class="release-li">Releases</span></li>
-            <li><span class="send-demo-li">Send Demo</span></li>
+            <li><span class="send-demo-li" id="openModal">Send Demo</span></li>
             <li><span class="contact-li">Contact</span></li>
         </ul>
         <button class="headerbtn"></button>
@@ -26,7 +26,7 @@
 
 <!--  ======================================== About Us ======================================= -->
 
-<div class="about-us-section hidden">
+<div class="about-us-section hidden menu-section">
     <div class="parafraphs">
     <p>About Us</p>
     <p>asdsad</p>
@@ -39,7 +39,7 @@
 
 <!--  ======================================== Artists ======================================== -->
 
-<div id="artists" class="section-artists hidden">
+<div id="artists" class="section-artists hidden menu-section">
     <h2 class="glitched">BEST ARTISTS</h2>
     <div class="artists-wrapper">
         <div class="threecards">
@@ -214,7 +214,7 @@
 </div>
 <!--  ======================================= Release ================================== -->
 
-<div class="release-section hidden">
+<div class="release-section hidden menu-section">
     <div class="imglogo">
     <img class="relimg" src="img/Oxytech Records Logo.jpg" />
 </div>
@@ -222,8 +222,11 @@
 
 <!--  ======================================= Send Demo ================================= -->
 
-<div id="contenedor" class="hidden">
-    <p>CONTACT FORM</p>
+<div id="myModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+<div id="contenedor" class="hidden menu-section">
+    <p>SEND DEMO</p>
     <div class="etiqueta"> 
       <h4>Name*</h4>
       <textarea name="comment" form="usrform">
@@ -244,14 +247,16 @@
       <textarea rows="10" name="comment" form="usrform">
 </textarea>
       <form>
-        <input type="submit" value="Send"/>
+        <input class="btnsubmit" type="submit" value="Send"/>
       </form>
     </div>
   </div>
+    </div>
+</div>
 
   <!--  ===================================== Contact ===================================== -->
 
-  <div class="contact-section hidden">
+  <div class="contact-section hidden menu-section">
     <div class="contact-links">
   <label>Facebook</label>
   <label>Facebook</label>
