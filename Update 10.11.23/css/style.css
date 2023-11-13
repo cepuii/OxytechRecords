@@ -564,3 +564,19 @@ button {
   width: 400px;
 }
 
+.release-section{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 20px;
+  background-color:   rgb(24, 0, 62);
+  color: white;
+}
+
+.release-card{
+  max-width: 250px;
+}
+
+.release-card img{
+  width: 100%;
+}
