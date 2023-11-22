@@ -698,6 +698,27 @@ button {
   width: 400px;
 }
 
+.release-container{
+  display: flex !important;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding-top: 100px;
+  gap: 20px;
+  padding: 20px;
+  background-color:   rgb(24, 0, 62);
+  color: white;
+}
+
+.release-card{
+  max-width: 250px;
+
+}
+
+.release-card img{
+  width: 100%;
+  border-radius: 50%;
+}
+
 /*  ===================== Contact (Footer) ===================== */
 
 .contact-section {
