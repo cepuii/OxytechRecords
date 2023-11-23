@@ -1,5 +1,4 @@
 //  ---------------- меню ------------------------
-
 // Отобразим только хедер
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -220,8 +219,9 @@ async function getDataFromApi(url) {
     });
 }
 
-async function dispalayReleases() {
-  const releases = await getDataFromApi(beatportApiURL)
+async function dispalayReleases(url = beatportApiURL) {
+
+  const releases = await getDataFromApi(url)
     .then((data) => {
       addReleasesOnPage(data.results);
     })
@@ -236,26 +236,61 @@ document
     document.querySelector(".release-section").appendChild(releasesContainer)
   );
 
-
-
 function addReleasesOnPage(releases) {
   releasesContainer.classList.add("release-container");
   console.log(releases);
   for (let release of releases) {
     let releaseCard = document.createElement("div");
     releaseCard.classList.add("release-card");
-    const {id, artists, name, image, price, url } = release;
+    const { id, artists, name, image, price, url } = release;
     const artistsString = artists.map((element) => element.name).join(", ");
     releaseCard.innerHTML = `
-            <img src="${image.uri}" alt="1">
-            <h3>${name}</h3>
-            <p>${artistsString}</p>
-            <p>${price.display}</p>
-            <audio onerror="handleError(event)">
-            </audio>
-            <button class='play' >Play</button>
-            <button class='pause' >Pause</button>
-            `;
+      <div class="image-parlax" ontouchstart="this.classList.toggle('hover');">
+        <div class="image-container release-card">
+          <div class="front-side">
+            <div class="inner">
+              <img src="${image.uri}" alt="1">
+            </div>
+          </div>
+          <div class="back-side" style="background-image: url(${image.uri}); background-size:contain; backgtound-position:center">
+            <div class="inner" style="display:flex; justify-content:center; align-items:center;">
+              <audio id="${id}" hidden onerror="handleError(event)">
+              </audio>
+              <div class="audio">
+                <div class="progress"></div>
+                <div class="info">
+                  <div class="thumbnail">
+                    <img src="${image.uri}" alt=""/>
+                    <span class="play_pause">
+                      <i class="bx bx-play-circle"></i>
+                    </span>
+                  </div>
+                  <div class="volume">
+                    <span class="volume-down"> - </span>
+                    <div class="volume-progress">
+                      <div class="volume-bar"></div>
+                    </div>
+                    <span class="volume-up"> + </span>
+                  </div>
+                  <div class="action">
+                    <div class="song">
+                      <div class="name">${name}</div>
+                      <div class="singer">${artistsString}</div>
+                    </div>
+                    <div class="time">
+                      <span class="current">0:00</span>
+                      /
+                      <span class="duration">0:00</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+
     const audio = releaseCard.querySelector("audio");
     getDataFromApi(url).then((data) => {
       getDataFromApi(data.tracks[0]).then((data) => {
@@ -263,17 +298,130 @@ function addReleasesOnPage(releases) {
       });
     });
 
-    var player = new Playerjs({replace:"audio"});
+    (() => {
+      const progressBar = releaseCard.querySelector(".progress");
 
-    releaseCard
-      .querySelector(".play")
-      .addEventListener("click", () => audio.play());
-    releaseCard
-      .querySelector(".pause")
-      .addEventListener("click", () => audio.pause());
+      for (i = 0; i < 100; i++) {
+        let span = document.createElement("span");
+        span.style.setProperty("--i", i);
+        progressBar.append(span);
+      }
+    })();
+
+    /**
+     * Audio player controls
+     */
+    let play_pause = releaseCard.querySelector(".play_pause");
+    let duration = releaseCard.querySelector(".duration");
+    let current = releaseCard.querySelector(".current");
+    let list_span = releaseCard.querySelectorAll(".progress span");
+    let volume_span = releaseCard.querySelectorAll(".volume span");
+
+    let timeFormat = (time) => {
+      second = Math.floor(time % 60);
+      minute = Math.floor((time / 60) % 60);
+      if (second < 10) {
+        second = "0" + second;
+      }
+
+      time = minute + ":" + second;
+      return time;
+    };
+
+    audio.addEventListener("loadedmetadata", () => {
+      duration.textContent = timeFormat(audio.duration);
+    });
+
+    play_pause.addEventListener("click", () => {
+      let iBtn = releaseCard.querySelector(".play_pause i");
+
+      if (audio.paused) {
+        audio.play();
+        iBtn.classList.replace("bx-play-circle", "bx-pause-circle");
+      } else {
+        audio.pause();
+        iBtn.classList.replace("bx-pause-circle", "bx-play-circle");
+      }
+    });
+
+    audio.addEventListener("timeupdate", () => {
+      time_current = audio.currentTime;
+      time_duration = audio.duration;
+
+      let position = Math.floor((time_current * 100) / time_duration);
+
+      current.textContent = timeFormat(time_current);
+
+      list_span[position].classList.add("active");
+    });
+
+    /**
+     * Volume controll
+     */
+    audio.volume = 0.5;
+
+    volume_span.forEach((element) => {
+      element.addEventListener("click", (e) => {
+        let volume = 0;
+
+        if (element.classList.contains("volume-down")) {
+          volume = audio.volume - 0.1;
+        } else if (element.classList.contains("volume-up")) {
+          volume = audio.volume + 0.1;
+        }
+
+        if (volume < 0) {
+          audio.volume = 0;
+        } else if (volume > 1) {
+          audio.volume = 1;
+        } else {
+          audio.volume = volume;
+        }
+
+        let width = audio.volume * 150;
+        let bar = releaseCard.querySelector(".volume-bar");
+        bar.style.setProperty("width", width + "px");
+      });
+    });
+
+    /**
+     * Seeking
+     */
+
+    list_span.forEach((element, index) => {
+      element.addEventListener("click", (e) => {
+        //remove active classes
+        list_span.forEach((e) => {
+          e.classList.remove("active");
+        });
+
+        //add active class to selected range
+        for (k = 0; k <= index; k++) {
+          list_span[k].classList.add("active");
+        }
+
+        //set current time
+        let time_go = (index * audio.duration) / 100;
+        audio.currentTime = time_go;
+      });
+    });
+
+    audio.addEventListener("ended", (e) => {
+      let iBtn = releaseCard.querySelector(".play_pause i");
+      iBtn.classList.replace("bx-pause-circle", "bx-play-circle");
+      current.textContent = "0:00";
+
+      list_span.forEach((e) => {
+        e.classList.remove("active");
+      });
+    });
 
     releasesContainer.appendChild(releaseCard);
+  
   }
+
+
+  // let player = new Playerjs({ replace: "audio" });
 }
 
 function handleError(event) {
