@@ -266,7 +266,6 @@ async function getAccessToken() {
       token = tokenObj.access_token;
       updateTokenInSession(tokenObj);
     }
-  
     return token;
   }
   
@@ -281,8 +280,7 @@ async function getAccessToken() {
     sessionStorage.setItem("token", tokenObj.access_token);
   }
   
-  const beatportApiURL =
-    "https://api.beatport.com/v4/catalog/labels/33556/releases";
+  const beatportApiURL ="https://api.beatport.com/v4/catalog/labels/33556/releases";
   
   const headerButton = document.querySelector(".headerbtn");
   
@@ -293,6 +291,9 @@ async function getAccessToken() {
   
   async function getDataFromApi(url) {
     const accessToken = await getAccessToken();
+    if(!url.startsWith('https')){
+      url = "https://" + url;
+    }
     return await fetch(url, {
       method: "GET", // or 'POST' if required by the API
       headers: {
@@ -310,25 +311,36 @@ async function getAccessToken() {
   }
   
   async function dispalayReleases(url = beatportApiURL) {
-  
     const releases = await getDataFromApi(url)
       .then((data) => {
         addReleasesOnPage(data.results);
+        updateButtonsPagination( data.next, data.previous);
       })
       .catch((error) => console.log(error));
   }
   
-  const releasesContainer = document.createElement("div");
-  
-  document
-    .querySelector(".release-li")
-    .addEventListener("click", () =>
-      document.querySelector(".release-section").appendChild(releasesContainer)
+  const releasesContainer = document.querySelector(".release-container");
+  document.querySelector(".release-li").addEventListener("click", () =>
+    releasesContainer.classList.toggle('hidden')
     );
   
+  function updateButtonsPagination(next, previous){
+
+    const nextButton =  document.querySelector('#nextPage')
+    
+    const prevButton = document.querySelector('#prevPage');
+
+    previous ? (prevButton.disabled=false) : (prevButton.disabled=true);
+    next ? (nextButton.disabled=false) : (nextButton.disabled=true);
+
+
+    nextButton.onclick = () => dispalayReleases(next);
+    prevButton.onclick = () => dispalayReleases(previous);
+
+  }
+
   function addReleasesOnPage(releases) {
-    releasesContainer.classList.add("release-container");
-    console.log(releases);
+    releasesContainer.innerHTML='';
     for (let release of releases) {
       let releaseCard = document.createElement("div");
       releaseCard.classList.add("release-card");
@@ -509,9 +521,6 @@ async function getAccessToken() {
       releasesContainer.appendChild(releaseCard);
     
     }
-  
-  
-    // let player = new Playerjs({ replace: "audio" });
   }
   
   function handleError(event) {
