@@ -717,9 +717,6 @@ button {
 .release-card{
   width: 350px;
   height: 350px;
-  --bg-color: #18705e;
-    --main-color: #cdff79;
-    --dark-color: #004c3d;
     display: grid;
     place-content: center;
 }
@@ -876,12 +873,15 @@ button {
   font-family: 'Anton';
 }
 
-/* audio player */
+/* audio player ----------------------------------------------------------------------------------------*/
 
 .audio {
   width: 240px;
   height: 240px;
   position: relative;
+  --bg-color: #18705e;
+  --main-color: #cdff79;
+  --dark-color: #004c3d;
 }
 
 .audio .progress {

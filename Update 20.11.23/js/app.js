@@ -203,6 +203,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
 async function getDataFromApi(url) {
   const accessToken = await getAccessToken();
+  if(!url.startsWith('https')){
+    url = "https://" + url;
+  }
   return await fetch(url, {
     method: "GET", // or 'POST' if required by the API
     headers: {
@@ -223,7 +226,8 @@ async function dispalayReleases(url = beatportApiURL) {
 
   const releases = await getDataFromApi(url)
     .then((data) => {
-      addReleasesOnPage(data.results);
+      addReleasesOnPage(data.results, data.next, data.previous);
+      console.log(data.next, data.previous);
     })
     .catch((error) => console.log(error));
 }
@@ -236,8 +240,9 @@ document
     document.querySelector(".release-section").appendChild(releasesContainer)
   );
 
-function addReleasesOnPage(releases) {
+function addReleasesOnPage(releases, nextPageUrl, previousUrl) {
   releasesContainer.classList.add("release-container");
+  releasesContainer.innerHTML='';
   console.log(releases);
   for (let release of releases) {
     let releaseCard = document.createElement("div");
@@ -252,7 +257,7 @@ function addReleasesOnPage(releases) {
               <img src="${image.uri}" alt="1">
             </div>
           </div>
-          <div class="back-side" style="background-image: url(${image.uri}); background-size:contain; backgtound-position:center">
+          <div class="back-side">
             <div class="inner" style="display:flex; justify-content:center; align-items:center;">
               <audio id="${id}" hidden onerror="handleError(event)">
               </audio>
@@ -419,9 +424,19 @@ function addReleasesOnPage(releases) {
     releasesContainer.appendChild(releaseCard);
   
   }
-
-
-  // let player = new Playerjs({ replace: "audio" });
+  
+  const nextButton = document.createElement('button');
+  nextButton.innerText="Next";
+  if(nextPageUrl){
+    nextButton.addEventListener('click', () => dispalayReleases(nextPageUrl))
+    releasesContainer.append(nextButton);
+  }
+  const prevButton = document.createElement('button');
+  prevButton.innerText="Previos";
+  if(previousUrl){
+  prevButton.addEventListener('click', () => dispalayReleases(previousUrl))
+  releasesContainer.append(prevButton);
+  }
 }
 
 function handleError(event) {
