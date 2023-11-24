@@ -259,6 +259,7 @@ function handleMouseEnter() {
 async function getAccessToken() {
     let token = sessionStorage.getItem("token");
     if (!token) {
+      console.log('get token from server');
       const tokenResponse = await axios(
         "https://expressserver-0u05.onrender.com/token"
       ).catch((error) => console.log(`Can't get token from server`));
@@ -274,9 +275,9 @@ async function getAccessToken() {
   }
   
   function updateTokenInSession(tokenObj) {
-    const now = new Date();
-    const tokenExpirationDate = now.getTime() + tokenObj.expires_in;
-    sessionStorage.setItem("expirationDate", tokenExpirationDate);
+    const expireTime = new Date();
+    expireTime.setTime(expireTime.getTime() + tokenObj.expires_in);
+    sessionStorage.setItem("expirationDate", expireTime.getTime());
     sessionStorage.setItem("token", tokenObj.access_token);
   }
   
@@ -311,8 +312,10 @@ async function getAccessToken() {
   }
   
   async function dispalayReleases(url = beatportApiURL) {
+    console.log(`get info from url: ${url}`);
     const releases = await getDataFromApi(url)
       .then((data) => {
+        console.log(data);
         addReleasesOnPage(data.results);
         updateButtonsPagination( data.next, data.previous);
       })
