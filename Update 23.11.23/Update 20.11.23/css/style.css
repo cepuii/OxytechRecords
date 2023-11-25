@@ -696,7 +696,7 @@ button {
 
 .release-section {
   width: 100%;
-  background-color: #0d93a5;
+  background-color:  rgb(24, 0, 62);
 }
 .relimg {
   width: 400px;
@@ -732,6 +732,24 @@ button {
   width: 100%;
   border-radius: 50%;
 }
+/* ================================ loader ===================================== */
+
+.loader {
+  margin: auto;
+  background-color:   rgb(24, 0, 62);
+  border: 16px solid #f3f3f3; /* Light grey */
+  border-top: 16px solid #000000;
+  border-radius: 50%;
+  width: 220px;
+  height: 220px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
 /* ================================ Pagination ================================ */
 
 .button-container{
