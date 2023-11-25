@@ -258,7 +258,9 @@ function handleMouseEnter() {
 
 async function getAccessToken() {
     let token = sessionStorage.getItem("token");
-    if (!token) {
+    let expirationDate = sessionStorage.getItem("expirationDate");
+    if (!token || isExpired(expirationDate)) {
+      console.log('get token from server');
       const tokenResponse = await axios(
         "https://expressserver-0u05.onrender.com/token"
       ).catch((error) => console.log(`Can't get token from server`));
@@ -274,9 +276,9 @@ async function getAccessToken() {
   }
   
   function updateTokenInSession(tokenObj) {
-    const now = new Date();
-    const tokenExpirationDate = now.getTime() + tokenObj.expires_in;
-    sessionStorage.setItem("expirationDate", tokenExpirationDate);
+    const expireTime = new Date();
+    expireTime.setTime(expireTime.getTime() + tokenObj.expires_in);
+    sessionStorage.setItem("expirationDate", expireTime.getTime());
     sessionStorage.setItem("token", tokenObj.access_token);
   }
   
@@ -311,8 +313,10 @@ async function getAccessToken() {
   }
   
   async function dispalayReleases(url = beatportApiURL) {
+    console.log(`get info from url: ${url}`);
     const releases = await getDataFromApi(url)
       .then((data) => {
+        console.log(data);
         addReleasesOnPage(data.results);
         updateButtonsPagination( data.next, data.previous);
       })
@@ -347,7 +351,6 @@ async function getAccessToken() {
       const { id, artists, name, image, price, url } = release;
       const artistsString = artists.map((element) => element.name).join(", ");
       releaseCard.innerHTML = `
-        <div class="image-parlax" ontouchstart="this.classList.toggle('hover');">
           <div class="image-container release-card">
             <div class="front-side">
               <div class="inner">
@@ -390,16 +393,19 @@ async function getAccessToken() {
               </div>
             </div>
           </div>
-        </div>
       `;
-  
+      
+      
       const audio = releaseCard.querySelector("audio");
+
+      // get mp3 url
       getDataFromApi(url).then((data) => {
         getDataFromApi(data.tracks[0]).then((data) => {
           audio.src = data.sample_url;
         });
       });
   
+
       (() => {
         const progressBar = releaseCard.querySelector(".progress");
   
@@ -434,7 +440,8 @@ async function getAccessToken() {
         duration.textContent = timeFormat(audio.duration);
       });
   
-      play_pause.addEventListener("click", () => {
+      
+      const playPauseButtonToggle =() => {
         let iBtn = releaseCard.querySelector(".play_pause i");
   
         if (audio.paused) {
@@ -444,8 +451,10 @@ async function getAccessToken() {
           audio.pause();
           iBtn.classList.replace("bx-pause-circle", "bx-play-circle");
         }
-      });
-  
+      }
+      
+      play_pause.addEventListener("click", playPauseButtonToggle);
+
       audio.addEventListener("timeupdate", () => {
         time_current = audio.currentTime;
         time_duration = audio.duration;
@@ -465,20 +474,14 @@ async function getAccessToken() {
       volume_span.forEach((element) => {
         element.addEventListener("click", (e) => {
           let volume = 0;
-  
+          
           if (element.classList.contains("volume-down")) {
             volume = audio.volume - 0.1;
           } else if (element.classList.contains("volume-up")) {
             volume = audio.volume + 0.1;
           }
   
-          if (volume < 0) {
-            audio.volume = 0;
-          } else if (volume > 1) {
-            audio.volume = 1;
-          } else {
-            audio.volume = volume;
-          }
+          audio.volume = Math.min(1, Math.max(0, volume));
   
           let width = audio.volume * 150;
           let bar = releaseCard.querySelector(".volume-bar");
@@ -508,7 +511,7 @@ async function getAccessToken() {
         });
       });
   
-      audio.addEventListener("ended", (e) => {
+      const stopAudio = () => {
         let iBtn = releaseCard.querySelector(".play_pause i");
         iBtn.classList.replace("bx-pause-circle", "bx-play-circle");
         current.textContent = "0:00";
@@ -516,13 +519,25 @@ async function getAccessToken() {
         list_span.forEach((e) => {
           e.classList.remove("active");
         });
+      }
+
+      // pause audio playing when mouse leave card borders
+      releaseCard.querySelector('.image-container').addEventListener("mouseleave", () => {
+        let iBtn = releaseCard.querySelector(".play_pause i");
+        audio.pause();
+        iBtn.classList.replace("bx-pause-circle", "bx-play-circle");
       });
+      
+      // stop audio playing when song is end
+      audio.addEventListener("ended", stopAudio);
   
       releasesContainer.appendChild(releaseCard);
     
     }
   }
   
+  
+
   function handleError(event) {
     console.error("Error loading audio:", event);
   }
