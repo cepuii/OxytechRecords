@@ -258,7 +258,8 @@ function handleMouseEnter() {
 
 async function getAccessToken() {
     let token = sessionStorage.getItem("token");
-    if (!token) {
+    let expirationDate = sessionStorage.getItem("expirationDate");
+    if (!token || isExpired(expirationDate)) {
       console.log('get token from server');
       const tokenResponse = await axios(
         "https://expressserver-0u05.onrender.com/token"
