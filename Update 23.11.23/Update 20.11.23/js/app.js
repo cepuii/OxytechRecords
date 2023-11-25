@@ -351,7 +351,6 @@ async function getAccessToken() {
       const { id, artists, name, image, price, url } = release;
       const artistsString = artists.map((element) => element.name).join(", ");
       releaseCard.innerHTML = `
-        <div class="image-parlax" ontouchstart="this.classList.toggle('hover');">
           <div class="image-container release-card">
             <div class="front-side">
               <div class="inner">
@@ -394,7 +393,6 @@ async function getAccessToken() {
               </div>
             </div>
           </div>
-        </div>
       `;
       
       

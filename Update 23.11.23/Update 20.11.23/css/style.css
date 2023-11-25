@@ -801,12 +801,12 @@ button {
 
 .audio .thumbnail {
   /* position: relative; */
-  width: 97px;
-  height: 97px;
+  width: 90px;
+  height: 95px;
   border-radius: 50%;
   padding: 2px;
   border: 1px solid var(--main-color);
-  /* overflow: hidden; */
+  overflow: hidden;
   margin-bottom: 1rem;
 }
 
