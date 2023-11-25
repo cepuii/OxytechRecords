@@ -351,7 +351,7 @@ async function getAccessToken() {
       let releaseCard = document.createElement("div");
       releaseCard.classList.add("release-card");
       const { id, artists, name, image, price, url } = release;
-      const artistsString = artists.map((element) => element.name).join(", ");
+      const artistsString = artists.slice(0,4).map((element) => element.name).join(", ");
       releaseCard.innerHTML = `
           <div class="image-container release-card">
             <div class="front-side">
