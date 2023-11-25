@@ -285,7 +285,8 @@ async function getAccessToken() {
   const beatportApiURL ="https://api.beatport.com/v4/catalog/labels/33556/releases";
   
   const headerButton = document.querySelector(".headerbtn");
-  
+
+  const loader = document.querySelector('#loader');
   document.addEventListener("DOMContentLoaded", () => {
     getAccessToken();
     dispalayReleases();
@@ -324,9 +325,9 @@ async function getAccessToken() {
   }
   
   const releasesContainer = document.querySelector(".release-container");
-  document.querySelector(".release-li").addEventListener("click", () =>
-    releasesContainer.classList.toggle('hidden')
-    );
+  document.querySelector(".release-li").addEventListener("click", () =>{
+    releasesContainer.classList.toggle('hidden');
+  });
   
   function updateButtonsPagination(next, previous){
 
@@ -344,6 +345,7 @@ async function getAccessToken() {
   }
 
   function addReleasesOnPage(releases) {
+    loader.style.display = "none";
     releasesContainer.innerHTML='';
     for (let release of releases) {
       let releaseCard = document.createElement("div");
