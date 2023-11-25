@@ -395,14 +395,18 @@ async function getAccessToken() {
           </div>
         </div>
       `;
-  
+      
+      
       const audio = releaseCard.querySelector("audio");
+
+      // get mp3 url
       getDataFromApi(url).then((data) => {
         getDataFromApi(data.tracks[0]).then((data) => {
           audio.src = data.sample_url;
         });
       });
   
+
       (() => {
         const progressBar = releaseCard.querySelector(".progress");
   
@@ -437,7 +441,8 @@ async function getAccessToken() {
         duration.textContent = timeFormat(audio.duration);
       });
   
-      play_pause.addEventListener("click", () => {
+      
+      const playPauseButtonToggle =() => {
         let iBtn = releaseCard.querySelector(".play_pause i");
   
         if (audio.paused) {
@@ -447,8 +452,10 @@ async function getAccessToken() {
           audio.pause();
           iBtn.classList.replace("bx-pause-circle", "bx-play-circle");
         }
-      });
-  
+      }
+      
+      play_pause.addEventListener("click", playPauseButtonToggle);
+
       audio.addEventListener("timeupdate", () => {
         time_current = audio.currentTime;
         time_duration = audio.duration;
@@ -468,20 +475,14 @@ async function getAccessToken() {
       volume_span.forEach((element) => {
         element.addEventListener("click", (e) => {
           let volume = 0;
-  
+          
           if (element.classList.contains("volume-down")) {
             volume = audio.volume - 0.1;
           } else if (element.classList.contains("volume-up")) {
             volume = audio.volume + 0.1;
           }
   
-          if (volume < 0) {
-            audio.volume = 0;
-          } else if (volume > 1) {
-            audio.volume = 1;
-          } else {
-            audio.volume = volume;
-          }
+          audio.volume = Math.min(1, Math.max(0, volume));
   
           let width = audio.volume * 150;
           let bar = releaseCard.querySelector(".volume-bar");
@@ -511,7 +512,7 @@ async function getAccessToken() {
         });
       });
   
-      audio.addEventListener("ended", (e) => {
+      const stopAudio = () => {
         let iBtn = releaseCard.querySelector(".play_pause i");
         iBtn.classList.replace("bx-pause-circle", "bx-play-circle");
         current.textContent = "0:00";
@@ -519,13 +520,25 @@ async function getAccessToken() {
         list_span.forEach((e) => {
           e.classList.remove("active");
         });
+      }
+
+      // pause audio playing when mouse leave card borders
+      releaseCard.querySelector('.image-container').addEventListener("mouseleave", () => {
+        let iBtn = releaseCard.querySelector(".play_pause i");
+        audio.pause();
+        iBtn.classList.replace("bx-pause-circle", "bx-play-circle");
       });
+      
+      // stop audio playing when song is end
+      audio.addEventListener("ended", stopAudio);
   
       releasesContainer.appendChild(releaseCard);
     
     }
   }
   
+  
+
   function handleError(event) {
     console.error("Error loading audio:", event);
   }
